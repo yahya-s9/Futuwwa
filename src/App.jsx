@@ -66,7 +66,15 @@ export default function App() {
     if (!name || addingHabit) return;
     setAddingHabit(true);
     try {
-      const habit = await insertHabit({ name, type: 'single', category: newHabitCategory });
+      // Salah always gets the per-prayer (Fajr..Isha) layout, regardless of
+      // the chosen section, so re-adding it after deletion isn't a plain
+      // once-a-day heatmap.
+      const isSalah = name.toLowerCase() === 'salah';
+      const habit = await insertHabit(
+        isSalah
+          ? { name, type: 'prayer', category: 'heart' }
+          : { name, type: 'single', category: newHabitCategory }
+      );
       setHabits((prev) => [...prev, habit]);
       setNewHabitName('');
     } finally {
