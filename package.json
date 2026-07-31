@@ -1,19 +1,19 @@
 {
-  "name": "habittrackerexpo",
+  "name": "habit-heatmap-dashboard",
   "version": "1.0.0",
-  "main": "index.js",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "2.2.0",
-    "expo": "~54.0.34",
-    "expo-status-bar": "~3.0.9",
-    "react": "19.1.0",
-    "react-native": "0.81.5"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
-  "private": true
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.0.7"
+  }
 }

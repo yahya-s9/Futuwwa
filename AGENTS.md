@@ -1,3 +1,6 @@
-# Expo HAS CHANGED
+# Habit Heatmap Dashboard
 
-Read the exact versioned docs at https://docs.expo.dev/versions/v54.0.0/ before writing any code.
+A Vite + React web app. Habit and daily-tracking data is stored in the browser's
+`localStorage` (see `src/lib/storage.js`) — there is no backend.
+
+Run locally with `npm run dev`.
