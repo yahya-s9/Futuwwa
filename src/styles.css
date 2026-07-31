@@ -178,10 +178,23 @@ body {
   white-space: nowrap;
 }
 
+.category-rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.category-columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: start;
+  gap: 20px;
+}
+
 .category-section {
   margin-bottom: 32px;
   border-left: 3px solid var(--category-color, var(--border));
   padding-left: 16px;
+  min-width: 0;
 }
 
 .category-mind {
@@ -240,10 +253,14 @@ body {
 }
 
 .habit-card-header {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
   margin-bottom: 12px;
+}
+
+.habit-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 .habit-name {
@@ -253,12 +270,13 @@ body {
 }
 
 .habit-total {
+  margin-top: 4px;
   font-size: 12px;
   color: var(--text-secondary);
-  flex: 1;
   display: flex;
   align-items: center;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 4px 8px;
 }
 
 .habit-streak {
@@ -466,4 +484,10 @@ body {
   color: var(--text-primary);
   font-size: 12px;
   cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  .category-columns {
+    grid-template-columns: 1fr;
+  }
 }

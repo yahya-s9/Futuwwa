@@ -23,19 +23,21 @@ export default function HabitHeatmap({ habit, entries, year, month, viewMode, on
   return (
     <section className="habit-card">
       <div className="habit-card-header">
-        <h2 className="habit-name">{habit.name}</h2>
+        <div className="habit-title-row">
+          <h2 className="habit-name">{habit.name}</h2>
+          <button
+            className="habit-delete"
+            onClick={() => onDelete(habit.id)}
+            aria-label={`Delete ${habit.name}`}
+            title="Delete habit"
+          >
+            ×
+          </button>
+        </div>
         <span className="habit-total">
           {total} day{total === 1 ? '' : 's'} total
           <span className="habit-streak">streak: {streak}</span>
         </span>
-        <button
-          className="habit-delete"
-          onClick={() => onDelete(habit.id)}
-          aria-label={`Delete ${habit.name}`}
-          title="Delete habit"
-        >
-          ×
-        </button>
       </div>
 
       <div className="heatmap-scroll">

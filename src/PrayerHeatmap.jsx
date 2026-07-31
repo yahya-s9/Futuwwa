@@ -33,19 +33,21 @@ export default function PrayerHeatmap({ habit, entries, year, month, viewMode, o
   return (
     <section className="habit-card">
       <div className="habit-card-header">
-        <h2 className="habit-name">{habit.name}</h2>
+        <div className="habit-title-row">
+          <h2 className="habit-name">{habit.name}</h2>
+          <button
+            className="habit-delete"
+            onClick={() => onDelete(habit.id)}
+            aria-label={`Delete ${habit.name}`}
+            title="Delete habit"
+          >
+            ×
+          </button>
+        </div>
         <span className="habit-total">
           {total} prayer{total === 1 ? '' : 's'} logged total
           <span className="habit-streak">streak: {streak}</span>
         </span>
-        <button
-          className="habit-delete"
-          onClick={() => onDelete(habit.id)}
-          aria-label={`Delete ${habit.name}`}
-          title="Delete habit"
-        >
-          ×
-        </button>
       </div>
 
       <div className="heatmap-scroll">

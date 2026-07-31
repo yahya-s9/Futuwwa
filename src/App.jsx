@@ -249,38 +249,40 @@ export default function App() {
             <p className="empty-state">No habits yet — add one above to start tracking.</p>
           )}
 
-          {CATEGORIES.map((category) => {
-            const categoryHabits = habits.filter(
-              (h) => (h.category ?? DEFAULT_CATEGORY) === category.key
-            );
-            if (habits.length === 0) return null;
-            return (
-              <section className={`category-section category-${category.key}`} key={category.key}>
-                <h2 className="category-title">{category.label}</h2>
-                {categoryHabits.length === 0 ? (
-                  <p className="empty-state category-empty">No habits here yet.</p>
-                ) : (
-                  <div className="habit-list">
-                    {categoryHabits.map((habit) => {
-                      const HeatmapComponent = habit.type === 'prayer' ? PrayerHeatmap : HabitHeatmap;
-                      return (
-                        <HeatmapComponent
-                          key={habit.id}
-                          habit={habit}
-                          entries={entries[habit.id] ?? {}}
-                          year={year}
-                          month={month}
-                          viewMode={viewMode}
-                          onToggleCell={toggleCell}
-                          onDelete={deleteHabit}
-                        />
-                      );
-                    })}
-                  </div>
-                )}
-              </section>
-            );
-          })}
+          <div className={viewMode === 'month' ? 'category-columns' : 'category-rows'}>
+            {CATEGORIES.map((category) => {
+              const categoryHabits = habits.filter(
+                (h) => (h.category ?? DEFAULT_CATEGORY) === category.key
+              );
+              if (habits.length === 0) return null;
+              return (
+                <section className={`category-section category-${category.key}`} key={category.key}>
+                  <h2 className="category-title">{category.label}</h2>
+                  {categoryHabits.length === 0 ? (
+                    <p className="empty-state category-empty">No habits here yet.</p>
+                  ) : (
+                    <div className="habit-list">
+                      {categoryHabits.map((habit) => {
+                        const HeatmapComponent = habit.type === 'prayer' ? PrayerHeatmap : HabitHeatmap;
+                        return (
+                          <HeatmapComponent
+                            key={habit.id}
+                            habit={habit}
+                            entries={entries[habit.id] ?? {}}
+                            year={year}
+                            month={month}
+                            viewMode={viewMode}
+                            onToggleCell={toggleCell}
+                            onDelete={deleteHabit}
+                          />
+                        );
+                      })}
+                    </div>
+                  )}
+                </section>
+              );
+            })}
+          </div>
         </>
       )}
     </div>
