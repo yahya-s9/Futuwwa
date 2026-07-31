@@ -26,3 +26,4 @@ Deployed on Vercel. Pushes to `master` deploy automatically once the
 project's Git integration is connected; `VITE_SUPABASE_URL` and
 `VITE_SUPABASE_ANON_KEY` must be set as environment variables on Vercel
 (Production, Preview, Development).
+
