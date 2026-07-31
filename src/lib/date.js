@@ -69,6 +69,39 @@ export function getYearDays(year) {
   return days;
 }
 
+// Builds the same week-column grid as getYearGrid, but scoped to one month.
+// Cells outside the month (padding at the start/end of its first/last week)
+// are null.
+export function getMonthGrid(year, month) {
+  const first = new Date(year, month, 1);
+  const last = new Date(year, month + 1, 0);
+
+  const gridStart = new Date(first);
+  gridStart.setDate(gridStart.getDate() - gridStart.getDay());
+
+  const gridEnd = new Date(last);
+  gridEnd.setDate(gridEnd.getDate() + (6 - gridEnd.getDay()));
+
+  const weeks = [];
+  let cursor = new Date(gridStart);
+  while (cursor <= gridEnd) {
+    const week = [];
+    for (let d = 0; d < 7; d++) {
+      const inMonth = cursor.getMonth() === month && cursor.getFullYear() === year;
+      week.push(inMonth ? new Date(cursor) : null);
+      cursor.setDate(cursor.getDate() + 1);
+    }
+    weeks.push(week);
+  }
+  return weeks;
+}
+
+// Every calendar day in one month, in order.
+export function getMonthDays(year, month) {
+  const count = new Date(year, month + 1, 0).getDate();
+  return Array.from({ length: count }, (_, i) => new Date(year, month, i + 1));
+}
+
 // Returns { dayIndex -> month short name } for days that start a new month.
 export function getDayMonthLabels(days) {
   const labels = {};

@@ -1,10 +1,13 @@
 import { useMemo } from 'react';
-import { getYearGrid, getMonthLabels, dateKey, isToday, computeStreak } from './lib/date.js';
+import { getYearGrid, getMonthGrid, getMonthLabels, dateKey, isToday, computeStreak } from './lib/date.js';
 
 const LEVEL_LABELS = ['Not done', 'Done', 'Done (extra)'];
 
-export default function HabitHeatmap({ habit, entries, year, onToggleCell, onDelete }) {
-  const weeks = useMemo(() => getYearGrid(year), [year]);
+export default function HabitHeatmap({ habit, entries, year, month, viewMode, onToggleCell, onDelete }) {
+  const weeks = useMemo(
+    () => (viewMode === 'month' ? getMonthGrid(year, month) : getYearGrid(year)),
+    [viewMode, year, month]
+  );
   const monthLabels = useMemo(() => getMonthLabels(weeks), [weeks]);
 
   const total = useMemo(
@@ -22,7 +25,7 @@ export default function HabitHeatmap({ habit, entries, year, onToggleCell, onDel
       <div className="habit-card-header">
         <h2 className="habit-name">{habit.name}</h2>
         <span className="habit-total">
-          {total} day{total === 1 ? '' : 's'} in {year}
+          {total} day{total === 1 ? '' : 's'} total
           <span className="habit-streak">streak: {streak}</span>
         </span>
         <button
@@ -37,13 +40,15 @@ export default function HabitHeatmap({ habit, entries, year, onToggleCell, onDel
 
       <div className="heatmap-scroll">
         <div className="heatmap">
-          <div className="heatmap-months" style={{ gridTemplateColumns: `repeat(${weeks.length}, var(--cell-col))` }}>
-            {weeks.map((_, i) => (
-              <span key={i} className="heatmap-month-label">
-                {monthLabels[i] ?? ''}
-              </span>
-            ))}
-          </div>
+          {viewMode === 'year' && (
+            <div className="heatmap-months" style={{ gridTemplateColumns: `repeat(${weeks.length}, var(--cell-col))` }}>
+              {weeks.map((_, i) => (
+                <span key={i} className="heatmap-month-label">
+                  {monthLabels[i] ?? ''}
+                </span>
+              ))}
+            </div>
+          )}
           <div className="heatmap-body">
             <div className="heatmap-daylabels">
               <span />

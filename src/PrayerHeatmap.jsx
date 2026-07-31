@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { getYearDays, getDayMonthLabels, dateKey, isToday, computeStreak } from './lib/date.js';
+import { getYearDays, getMonthDays, getDayMonthLabels, dateKey, isToday, computeStreak } from './lib/date.js';
 
 const PRAYER_NAMES = ['Fajr', 'Duhr', 'Asr', 'Maghrib', 'Isha'];
 const LEVEL_LABELS = ['Not prayed', 'Prayed', 'Prayed (made up)'];
@@ -8,8 +8,11 @@ function entryKey(key, prayerIndex) {
   return `${key}_${prayerIndex}`;
 }
 
-export default function PrayerHeatmap({ habit, entries, year, onToggleCell, onDelete }) {
-  const days = useMemo(() => getYearDays(year), [year]);
+export default function PrayerHeatmap({ habit, entries, year, month, viewMode, onToggleCell, onDelete }) {
+  const days = useMemo(
+    () => (viewMode === 'month' ? getMonthDays(year, month) : getYearDays(year)),
+    [viewMode, year, month]
+  );
   const monthLabels = useMemo(() => getDayMonthLabels(days), [days]);
 
   const total = useMemo(
@@ -32,7 +35,7 @@ export default function PrayerHeatmap({ habit, entries, year, onToggleCell, onDe
       <div className="habit-card-header">
         <h2 className="habit-name">{habit.name}</h2>
         <span className="habit-total">
-          {total} prayer{total === 1 ? '' : 's'} logged in {year}
+          {total} prayer{total === 1 ? '' : 's'} logged total
           <span className="habit-streak">streak: {streak}</span>
         </span>
         <button
@@ -47,16 +50,18 @@ export default function PrayerHeatmap({ habit, entries, year, onToggleCell, onDe
 
       <div className="heatmap-scroll">
         <div className="heatmap">
-          <div
-            className="heatmap-months"
-            style={{ gridTemplateColumns: `repeat(${days.length}, var(--cell-col))`, paddingLeft: 'var(--prayer-label-width)' }}
-          >
-            {days.map((_, i) => (
-              <span key={i} className="heatmap-month-label">
-                {monthLabels[i] ?? ''}
-              </span>
-            ))}
-          </div>
+          {viewMode === 'year' && (
+            <div
+              className="heatmap-months"
+              style={{ gridTemplateColumns: `repeat(${days.length}, var(--cell-col))`, paddingLeft: 'var(--prayer-label-width)' }}
+            >
+              {days.map((_, i) => (
+                <span key={i} className="heatmap-month-label">
+                  {monthLabels[i] ?? ''}
+                </span>
+              ))}
+            </div>
+          )}
           <div className="heatmap-body">
             <div className="heatmap-daylabels prayer-labels">
               {PRAYER_NAMES.map((name) => (

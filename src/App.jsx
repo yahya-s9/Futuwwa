@@ -3,6 +3,7 @@ import HabitHeatmap from './HabitHeatmap.jsx';
 import PrayerHeatmap from './PrayerHeatmap.jsx';
 import Auth from './Auth.jsx';
 import { supabase } from './lib/supabaseClient.js';
+import { MONTH_NAMES } from './lib/date.js';
 import {
   fetchHabits,
   insertHabit,
@@ -12,7 +13,9 @@ import {
   deleteEntry,
 } from './lib/data.js';
 
-const CURRENT_YEAR = new Date().getFullYear();
+const TODAY = new Date();
+const CURRENT_YEAR = TODAY.getFullYear();
+const CURRENT_MONTH = TODAY.getMonth();
 
 const CATEGORIES = [
   { key: 'mind', label: 'Sharpen the Mind' },
@@ -27,9 +30,60 @@ export default function App() {
   const [entries, setEntries] = useState({});
   const [loadingData, setLoadingData] = useState(false);
   const [addingHabit, setAddingHabit] = useState(false);
+  const [viewMode, setViewMode] = useState('month'); // 'month' | 'year'
   const [year, setYear] = useState(CURRENT_YEAR);
+  const [month, setMonth] = useState(CURRENT_MONTH);
   const [newHabitName, setNewHabitName] = useState('');
   const [newHabitCategory, setNewHabitCategory] = useState(DEFAULT_CATEGORY);
+
+  const isAtLatest =
+    viewMode === 'month'
+      ? year === CURRENT_YEAR && month === CURRENT_MONTH
+      : year === CURRENT_YEAR;
+
+  function goPrev() {
+    if (viewMode === 'month') {
+      if (month === 0) {
+        setYear((y) => y - 1);
+        setMonth(11);
+      } else {
+        setMonth((m) => m - 1);
+      }
+    } else {
+      setYear((y) => y - 1);
+    }
+  }
+
+  function goNext() {
+    if (isAtLatest) return;
+    if (viewMode === 'month') {
+      if (month === 11) {
+        setYear((y) => y + 1);
+        setMonth(0);
+      } else {
+        setMonth((m) => m + 1);
+      }
+    } else {
+      setYear((y) => y + 1);
+    }
+  }
+
+  useEffect(() => {
+    function handleKeyDown(e) {
+      const tag = document.activeElement?.tagName;
+      if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        goPrev();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        goNext();
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [viewMode, year, month]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => setSession(data.session));
@@ -122,16 +176,34 @@ export default function App() {
       <header className="app-header">
         <h1>Futuwwa</h1>
         <div className="header-right">
-          <div className="year-picker">
-            <button type="button" onClick={() => setYear((y) => y - 1)} aria-label="Previous year">
-              ‹
-            </button>
-            <span className="year-picker-value">{year}</span>
+          <div className="view-mode-toggle" role="group" aria-label="View granularity">
             <button
               type="button"
-              onClick={() => setYear((y) => y + 1)}
-              aria-label="Next year"
-              disabled={year >= CURRENT_YEAR}
+              className={viewMode === 'month' ? 'active' : ''}
+              onClick={() => setViewMode('month')}
+            >
+              Month
+            </button>
+            <button
+              type="button"
+              className={viewMode === 'year' ? 'active' : ''}
+              onClick={() => setViewMode('year')}
+            >
+              Year
+            </button>
+          </div>
+          <div className="year-picker">
+            <button type="button" onClick={goPrev} aria-label={viewMode === 'month' ? 'Previous month' : 'Previous year'}>
+              ‹
+            </button>
+            <span className="year-picker-value">
+              {viewMode === 'month' ? `${MONTH_NAMES[month]} ${year}` : year}
+            </span>
+            <button
+              type="button"
+              onClick={goNext}
+              aria-label={viewMode === 'month' ? 'Next month' : 'Next year'}
+              disabled={isAtLatest}
             >
               ›
             </button>
@@ -197,6 +269,8 @@ export default function App() {
                           habit={habit}
                           entries={entries[habit.id] ?? {}}
                           year={year}
+                          month={month}
+                          viewMode={viewMode}
                           onToggleCell={toggleCell}
                           onDelete={deleteHabit}
                         />

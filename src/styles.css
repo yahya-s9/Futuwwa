@@ -61,6 +61,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
   margin-bottom: 20px;
 }
 
@@ -73,7 +75,34 @@ body {
 .header-right {
   display: flex;
   align-items: center;
-  gap: 20px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.view-mode-toggle {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.view-mode-toggle button {
+  padding: 6px 12px;
+  border: none;
+  background: var(--card-bg);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.view-mode-toggle button + button {
+  border-left: 1px solid var(--border);
+}
+
+.view-mode-toggle button.active {
+  background: var(--accent);
+  color: #fff;
 }
 
 .year-picker {
@@ -104,6 +133,7 @@ body {
   font-size: 14px;
   min-width: 42px;
   text-align: center;
+  white-space: nowrap;
 }
 
 .add-habit-form {
