@@ -20,7 +20,9 @@ export default function Auth() {
   return (
     <div className="auth-screen">
       <div className="auth-card">
-        <h1 className="auth-title">Futuwwa</h1>
+        <div className="auth-logo-wrap">
+          <img className="auth-logo" src="/logo-lockup.png" alt="Futuwwa" width="220" height="216" />
+        </div>
         <p className="auth-subtitle">Track your habits. Sign in with Google to get started.</p>
 
         <button className="google-signin-btn" onClick={handleGoogleSignIn} disabled={status === 'redirecting'}>

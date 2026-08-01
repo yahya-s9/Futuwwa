@@ -174,7 +174,10 @@ export default function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>Futuwwa</h1>
+        <div className="app-brand">
+          <img src="/logo-icon.png" alt="" width="28" height="28" />
+          <h1>Futuwwa</h1>
+        </div>
         <div className="header-right">
           <div className="view-mode-toggle" role="group" aria-label="View granularity">
             <button

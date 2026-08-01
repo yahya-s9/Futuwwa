@@ -66,6 +66,18 @@ body {
   margin-bottom: 20px;
 }
 
+.app-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.app-brand img {
+  border-radius: 7px;
+  background: #f6f7f1;
+  padding: 2px;
+}
+
 .app-header h1 {
   font-size: 22px;
   font-weight: 700;
@@ -417,10 +429,18 @@ body {
   text-align: center;
 }
 
-.auth-title {
-  font-size: 22px;
-  font-weight: 700;
-  margin: 0 0 8px;
+.auth-logo-wrap {
+  width: 140px;
+  margin: 0 auto 8px;
+  padding: 10px;
+  background: #f6f7f1;
+  border-radius: 16px;
+}
+
+.auth-logo {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .auth-subtitle {
